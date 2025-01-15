@@ -69,17 +69,33 @@ function renderLocs(locs) {
 }
 
 function onRemoveLoc(locId) {
-    locService.remove(locId)
-        .then(() => {
-            flashMsg('Location removed')
-            unDisplayLoc()
-            loadAndRenderLocs()
-        })
-        .catch(err => {
-            console.error('OOPs:', err)
-            flashMsg('Cannot remove location')
-        })
+
+    const prm3 = Swal.fire({
+        title: 'Should we?',
+        showDenyButton: true,
+    })
+
+    prm3.then(res => {
+        // console.log('res:', res)
+        if (res.isConfirmed) {
+            locService.remove(locId)
+                .then(() => {
+                    flashMsg('Location removed')
+                    unDisplayLoc()
+                    loadAndRenderLocs()
+                })
+                .catch(err => {
+                    console.error('OOPs:', err)
+                    flashMsg('Cannot remove location')
+                })
+
+        } else {
+            console.log('No!')
+        }
+    })
 }
+
+
 
 function onSearchAddress(ev) {
     ev.preventDefault()
@@ -223,7 +239,7 @@ function getFilterByFromQueryParams() {
     const queryParams = new URLSearchParams(window.location.search)
     const txt = queryParams.get('txt') || ''
     const minRate = queryParams.get('minRate') || 0
-    locService.setFilterBy({txt, minRate})
+    locService.setFilterBy({ txt, minRate })
 
     document.querySelector('input[name="filter-by-txt"]').value = txt
     document.querySelector('input[name="filter-by-rate"]').value = minRate
