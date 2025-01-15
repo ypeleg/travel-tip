@@ -53,8 +53,6 @@ function query() {
                 locs = locs.slice(startIdx, startIdx + PAGE_SIZE)
             }
 
-            console.log(gSortBy)
-
             if (gSortBy.rate !== undefined) {
                 locs.sort((p1, p2) => (p1.rate - p2.rate) * gSortBy.rate)
             } else if (gSortBy.time !== undefined) {
@@ -63,6 +61,8 @@ function query() {
                 locs.sort((p1, p2) => p1.name.localeCompare(p2.name) * gSortBy.name)
             }
 
+            console.log(locs)
+            
             return locs
         })
 }
@@ -109,7 +109,8 @@ function getLocCountByUpdateMap() {
     return storageService.query(DB_KEY)
         .then(locs => {
             const locCountByUpdateMap = locs.reduce((map, loc) => {                
-                var hoursPast = null
+                
+                var hoursPast = null                                                
                 if (loc.updatedAt) {
                     const now = new Date()                
                     hoursPast = Math.floor( (Math.floor( (Math.round(
@@ -118,7 +119,8 @@ function getLocCountByUpdateMap() {
                                                                          ) / 60) // min
                                                                          ) / 60) // hour             
                 }
-                if (hoursPast === null) map.never++
+                                
+                if (loc.updatedAt === loc.createdAt) map.never++
                 else if (hoursPast < 24) map.today++
                 else map.past++                
                 return map

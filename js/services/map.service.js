@@ -43,12 +43,23 @@ function lookupAddressGeo(geoOrAddress) {
         .then(res => res.json())
         .then(res => {
             // console.log('RES IS', res)
-            if (!res.results.length) return new Error('Found nothing')
-            res = res.results[0]
-            const {formatted_address, geometry} = res
+            if (!res.results.length){
+                var theAdress = ''
+                var geometry = {
+                    location: {
+                        lat: geoOrAddress.lat,
+                        lng: geoOrAddress.lng
+                    }
+                }                
+                
+            } else { //return new Error('Found nothing')
+                res = res.results[0]
+                const {formatted_address, geometry} = res
+                var theAdress = formatted_address.substring(formatted_address.indexOf(' ')).trim()
+            }
 
             const geo = {
-                address: formatted_address.substring(formatted_address.indexOf(' ')).trim(),
+                address: theAdress,
                 lat: geometry.location.lat,
                 lng: geometry.location.lng,
                 zoom: gMap.getZoom()

@@ -9,11 +9,21 @@
 </head>
 
 <body>
+
+    <dialog class = "modal">        
+        <form class = "modal-form" method="dialog" onsubmit="app.onSubmitModel(event)">
+            <input class = "edit-location" type = "text" placeholder = "location">                
+            <input class = "edit-rate" type = "number" placeholder = "rate">
+            <button class = "save-btn">Save</button>
+        </form>
+    </dialog>
+    
     <header>
         <h1>TravelTip</h1>
         <section class="selected-loc">
             <h2>Location: <span class="loc-name"></span> <span class="loc-rate"></span></h2>
             <h4 class="loc-address"></h4>
+            <h4 class="loc-distance"></h4>
             <button onclick="app.onCopyLoc()">Copy location</button>
             <button onclick="app.onShareLoc()">Share location</button>
             <input name="loc-copier" />
